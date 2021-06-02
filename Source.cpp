@@ -4,22 +4,81 @@
 
 using namespace std;
 
+
+//в dataInput буде записане значення вводу з консолі
+//textInCout - текст, який має вивестися на консоль
+void checkExceptionForPositiveNumbers(int& dataInput, string textInCout)// тільки для додатніх чисел
+{
+	bool stopLoop = false;
+	int tempNumber;
+	do
+	{
+		cout << textInCout;
+		cin >> tempNumber;
+		if (std::cin.fail() || tempNumber < 0) // якщо не змогли записати дані з консолі в змінну або число було від'ємне
+		{
+			std::cin.clear(); // забирання "помилки" з cin 
+
+			// видалення з буферу  до 10000 символів разом з переходом 
+			//на новий рядок(припускаємо, що користувач більше символів не введе)
+			std::cin.ignore(10000, '\n');
+			std::cout << "Введено неправильнi данi!\n";
+
+		}
+		else
+		{
+			std::cin.ignore(10000, '\n'); // видалення зайвих значень з буфера
+			dataInput = tempNumber;
+			stopLoop = true;
+		}
+	}
+	while(!stopLoop);
+}
+//то саме що і попередня функція, але від'ємні число з консолі теж може бути від'ємне
+void checkExceptionForNumbers(int& dataInput, string textInCout)// тільки для додатніх чисел
+{
+	bool stopLoop = false;
+	int tempNumber;
+	do
+	{
+		cout << textInCout;
+		cin >> tempNumber;
+		if (std::cin.fail()) // якщо не змогли записати дані з консолі в змінну або число було від'ємне
+		{
+			std::cin.clear(); // забирання "помилки" з cin 
+
+			// видалення з буферу  до 10000 символів разом з переходом 
+			//на новий рядок(припускаємо, що користувач більше символів не введе)
+			std::cin.ignore(10000, '\n');
+			std::cout << "Введено неправильнi данi!\n";
+
+		}
+		else
+		{
+			std::cin.ignore(10000, '\n'); // видалення зайвих значень з буфера
+			dataInput = tempNumber;
+			stopLoop = true;
+		}
+	} while (!stopLoop);
+}
+
 int main()
 {
-	setlocale(LC_ALL, "RU");
+	setlocale(LC_ALL, "");
 
-	int stadium_quantity, gym_quantity, court_quantity;
+	int stadium_quantity = -1, gym_quantity, court_quantity;
 	Stadium* stadium;
 	Gym* gym;
 	Court* court;
 
 	/*Ниже мы вводим количество стадионов, спортзалов и кортов. Желательно вводить небольшое количество(1 - 2 штуки),
 	иначе ввод данных окажется весьма длительным.*/
-	do {
-		cout << "Введите количество стадионов(> 0): ";
-		cin >> stadium_quantity;
-		cout << endl;
-	} while (stadium_quantity <= 0);
+	//do {
+	//cout << "Введите количество стадионов(> 0): ";
+	//cin >> stadium_quantity;
+	checkExceptionForPositiveNumbers(stadium_quantity, "Введите количество стадионов(> 0): ");
+	cout << endl;
+	//} while (stadium_quantity <= 0);
 	do {
 		cout << "Введите количество спортзалов(> 0): ";
 		cin >> gym_quantity;
@@ -41,7 +100,7 @@ int main()
 		cin.ignore(cin.rdbuf()->in_avail());
 		cin.getline(stadium[i].infrastructure_name, 30);
 		cout << endl;
-
+		
 		do {
 			cout << "Введите площадь стадиона(> 0): ";
 			cin >> stadium[i].area;
